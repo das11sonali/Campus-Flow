@@ -1,0 +1,156 @@
+body{
+    background:blanchedalmond;
+    font-family:Arial, sans-serif;
+    margin:0;
+    padding:30px;
+}
+
+.assignment-container{
+    max-width:1000px;
+    margin:auto;
+}
+
+h1{
+    text-align:center;
+    color:#5c4033;
+}
+
+.assignment-form{
+    display:flex;
+    gap:10px;
+    justify-content:center;
+    margin-bottom:30px;
+}
+
+.assignment-form input,
+.assignment-form button{
+    padding:12px;
+    border-radius:10px;
+    border:none;
+}
+
+.assignment-form button{
+    background:#6f4e37;
+    color:white;
+    cursor:pointer;
+}
+
+.assignment-list{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+    gap:20px;
+}
+
+.assignment-card{
+    background:white;
+    border-radius:15px;
+    padding:20px;
+    box-shadow:0 4px 12px rgba(0,0,0,0.1);
+    transition:0.3s;
+}
+
+.assignment-card:hover{
+    transform:translateY(-5px);
+}
+
+.assignment-card h3{
+    color:#5c4033;
+}
+
+.roast-box{
+    background:#fff4e5;
+    padding:10px;
+    border-radius:10px;
+    margin:15px 0;
+    color:#7a4b00;
+    font-weight:bold;
+}
+
+.card-buttons{
+    display:flex;
+    gap:10px;
+}
+
+.complete-btn{
+    background:#4caf50;
+    color:white;
+    border:none;
+    padding:10px;
+    border-radius:8px;
+    cursor:pointer;
+}
+
+.delete-btn{
+    background:#e53935;
+    color:white;
+    border:none;
+    padding:10px;
+    border-radius:8px;
+    cursor:pointer;
+}
+.success-popup{
+    display:none;
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    background:rgba(0,0,0,0.5);
+    justify-content:center;
+    align-items:center;
+    z-index:9999;
+}
+
+.popup-content{
+    background:white;
+    padding:30px;
+    border-radius:20px;
+    width:400px;
+    text-align:center;
+    box-shadow:0 10px 25px rgba(0,0,0,0.2);
+    animation:popupAnim 0.4s ease;
+}
+
+@keyframes popupAnim{
+    from{
+        transform:scale(0.8);
+        opacity:0;
+    }
+
+    to{
+        transform:scale(1);
+        opacity:1;
+    }
+}
+
+.popup-content h2{
+    color:#6f4e37;
+}
+
+.popup-content p{
+    margin:15px 0;
+    font-size:16px;
+}
+
+.popup-buttons{
+    display:flex;
+    justify-content:center;
+    gap:10px;
+}
+
+.hangout-btn{
+    background:#6f4e37;
+    color:white;
+    border:none;
+    padding:10px 16px;
+    border-radius:10px;
+    cursor:pointer;
+}
+
+.close-btn{
+    background:#ddd;
+    border:none;
+    padding:10px 16px;
+    border-radius:10px;
+    cursor:pointer;
+}

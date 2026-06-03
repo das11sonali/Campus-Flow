@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trip Planner</title>
+
+    <link rel="stylesheet"
+    href="{{url_for('static',filename='trips.css')}}">
+</head>
+<body>
+    <div class="trips-container">
+        <h1>✈️Trip planning</h1>
+        <p>Explore hangout places and empty down your bucket list.</p>
+
+        <div class="trips-form">
+            <input
+            type="text"
+            id="destination"
+            placeholder="Enter destination">
+
+            <input
+            type="number"
+            id="budget"
+            placeholder="Budget">
+
+            <input
+            type="number"
+            id="days"
+            placeholder="No.of days">
+
+            <button id="plan-btn">Trip Plan</button>
+
+        </div>
+        <div id="trip-result"></div>
+    </div>
+    <script src="{{url_for('static',filename='trips.js')}}"></script>
+
+
+    
+</body>
+</html>

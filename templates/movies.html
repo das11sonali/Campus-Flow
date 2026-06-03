@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CampusFlow Movies</title>
+    <link rel="stylesheet"
+    href="{{url_for('static',filename='movies.css')}}">
+
+    
+</head>
+
+<body>
+
+    <h1>🎬 Movies</h1>
+
+    <!-- Trending Movies -->
+    <h2>Trending Movies</h2>
+    <div class="movie-row" id="trendingMovies"></div>
+
+    <!-- Anime Section -->
+    <h2>Anime Picks</h2>
+    <div class="movie-row" id="animeMovies"></div>
+
+    <!-- Horror Section -->
+    <h2>Horror Night</h2>
+    <div class="movie-row" id="horrorMovies"></div>
+
+    <!-- Comedy Section -->
+    <h2>Feel Good Movies</h2>
+    <div class="movie-row" id="comedyMovies"></div>
+
+    
+
+    <script src="{{url_for('static',filename='movies.js')}}"> </script>
+
+</body>
+</html>

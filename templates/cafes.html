@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Nearby Cafes</title>
+
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet"
+        href="https://unpkg.com/leaflet/dist/leaflet.css"/>
+
+    <link rel="stylesheet"
+        href="{{ url_for('static', filename='cafes.css') }}">
+</head>
+
+<body>
+
+    <div class="container">
+
+        <h1>☕ Nearby Cafes</h1>
+
+        <p>Discover cafes around your location.</p>
+        <!--MAP-->
+        <div id="map"></div>
+
+        <!-- CAFE CARDS -->
+        <div id="cafes-container"></div>
+
+    </div>
+
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script src="{{ url_for('static', filename='cafes.js') }}"></script>
+ 
+</body>
+
+</html>

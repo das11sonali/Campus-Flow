@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>CampusFlow</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='planner.css') }}">
+</head>
+<body>
+    <div class="planner-container">
+
+        <h2>AI Study Planner</h2>
+
+        <div id="subjects-container">
+
+            <div class="subject-row">
+                <input
+                type="text"
+                class="subject"
+                placeholder="Subject Name">
+
+                <input
+                type="date"
+                class="deadline"
+                placeholder="finish by">
+            </div>
+
+        </div>
+
+        <button id="add-subject">
+        + Add Subject
+        </button>
+
+        <input
+        type="number"
+        id="hours"
+        placeholder="Hours Available Per Day">
+
+        <button id="generate-plan">
+        Generate Study Plan
+        </button>
+
+        <div id="result"></div>
+
+    </div>
+    <script src="{{url_for('static',filename='planner.js')}}"></script>
+
+    
+</body>
+</html>

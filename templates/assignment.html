@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Assignments</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='assignment.css') }}">
+</head>
+<body>
+
+<div class="assignment-container">
+
+    <h1>📚 Assignment Tracker</h1>
+
+    <form class="assignment-form" action ="/add" method="POST">
+        <input type="text" name="title" placeholder="Assignment Name" required>
+        <input type="date" name="due_date"   required>
+        <button type="submit">Add Assignment</button>
+    </form>
+
+    <div class="assignment-list">
+
+        {% for assignment in assignments %}
+
+<div class="assignment-card">
+
+    <h3>{{ assignment.title }}</h3>
+
+    <p>
+        📅 Due: {{ assignment.due_date }}
+    </p>
+
+    {% if assignment.completed %}
+
+        <div class="roast-box">
+            {{ assignment.completion_message }}
+        </div>
+
+    {% else %}
+
+        <div class="roast-box">
+            💀 {{ assignment.roast }}
+        </div>
+
+    {% endif %}
+
+    <div class="card-buttons">
+
+        <a href="/complete/{{ assignment.id }}">
+            <button class="complete-btn">
+                ✓ Complete
+            </button>
+        </a>
+
+        <a href="/delete_assignment/{{ assignment.id}}">
+            <button class="delete-btn">
+                🗑 Delete
+            </button>
+        </a>
+
+    </div>
+
+</div>
+
+{% endfor %}
+
+    </div>
+
+</div>
+<div id="successPopup" class="success-popup">
+
+    <div class="popup-content">
+
+        <h2 id="popup-title">🎉 Assignment Defeated!</h2>
+
+        <p id="popup-message">
+            Time to recharge.
+        </p>
+
+        <div class="popup-buttons">
+
+            <a href="/hangout">
+                <button class="hangout-btn">
+                    🌳 Find a Hangout Spot
+                </button>
+            </a>
+
+            <button onclick="closePopup()" class="close-btn">
+                Awesome!
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+<script src="{{ url_for('static', filename='assignment.js') }}"></script>
+
+</body>
+</html>
