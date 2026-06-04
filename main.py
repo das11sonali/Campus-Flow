@@ -7,13 +7,134 @@ import os
 import json
 from datetime import datetime
 import random
+from flask_login import (
+    LoginManager,
+    UserMixin,
+    login_user,
+    login_required,
+    logout_user,
+    current_user
+)
+
+from werkzeug.security import (
+    generate_password_hash,
+    check_password_hash
+)
 
 load_dotenv
 app = Flask(__name__)
 
+
 genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
+app.secret_key = "campusflow_secret_key"
 
 model = genai.GenerativeModel("gemini-2.5-flash")
+login_manager = LoginManager()
+login_manager.init_app(app)
+login_manager.login_view = "login"
+
+class User(UserMixin):
+
+    def __init__(self,id,username,password):
+        self.id = id
+        self.username = username
+        self.password = password
+
+@login_manager.user_loader
+def load_user(user_id):
+
+    conn = get_db()
+
+    user = conn.execute(
+        "SELECT * FROM users WHERE id=?",
+        (user_id,)
+    ).fetchone()
+
+    conn.close()
+
+    if user:
+        return User(
+            user["id"],
+            user["username"],
+            user["password"]
+        )
+
+    return None
+
+@app.route("/register", methods=["GET","POST"])
+def register():
+
+    if request.method == "POST":
+
+        username = request.form["username"]
+        password = generate_password_hash(
+            request.form["password"]
+        )
+
+        conn = get_db()
+
+        conn.execute(
+            """
+            INSERT INTO users(username,password)
+            VALUES (?,?)
+            """,
+            (username,password)
+        )
+
+        conn.commit()
+        conn.close()
+
+        return redirect("/login")
+
+    return render_template("register.html")
+
+@app.route("/login", methods=["GET","POST"])
+def login():
+
+    if request.method == "POST":
+
+        username = request.form["username"]
+        password = request.form["password"]
+
+        conn = get_db()
+
+        user = conn.execute(
+            """
+            SELECT * FROM users
+            WHERE username=?
+            """,
+            (username,)
+        ).fetchone()
+
+        conn.close()
+
+        if user and check_password_hash(
+            user["password"],
+            password
+        ):
+
+            login_user(
+                User(
+                    user["id"],
+                    user["username"],
+                    user["password"]
+                )
+            )
+
+            return redirect("/")
+
+    return render_template("login.html")
+
+@app.route("/logout")
+@login_required
+def logout():
+
+    logout_user()
+
+    return redirect("/login")
+
+
+
 
 
 def get_db():
@@ -90,13 +211,16 @@ def home():
     return render_template("index.html")
 
 @app.route("/assignment")
+@login_required
 def assignment():
 
     today = datetime.now().date()
     conn = get_db()
 
     assignments = conn.execute(
-        "SELECT * FROM assignments"
+        """SELECT * FROM assignments
+        WHERE user_id=?""",
+    (current_user.id,)
     ).fetchall()
 
     conn.close()
@@ -128,6 +252,7 @@ def assignment():
 
 
 @app.route("/add", methods=["POST"])
+@login_required
 def add():
 
     title = request.form["title"]
@@ -138,10 +263,10 @@ def add():
     conn.execute(
         """
         INSERT INTO assignments
-        (title,due_date)
-        VALUES (?,?)
+        (title,due_date,user_id)
+        VALUES (?,?,?)
         """,
-        (title,due_date)
+        (title,due_date,current_user.id)
     )
 
     conn.commit()
@@ -151,6 +276,7 @@ def add():
 
 
 @app.route("/complete/<int:index>")
+@login_required
 def complete(index):
 
     message = get_completion_message()
@@ -162,9 +288,9 @@ def complete(index):
         UPDATE assignments
         SET completed=1,
             completion_message=?
-        WHERE id=?
+        WHERE id=? AND user_id=?
         """,
-        (message,index)
+        (message,index,current_user.id)
     )
 
     conn.commit()
@@ -174,13 +300,14 @@ def complete(index):
 
 
 @app.route("/delete_assignment/<int:id>")
+@login_required
 def delete_assignment(id):
 
     conn = get_db()
 
     conn.execute(
-        "DELETE FROM assignments WHERE id=?",
-        (id,)
+        "DELETE FROM assignments WHERE id=? AND user_id=?",
+        (id,current_user.id)
     )
 
     conn.commit()
@@ -189,6 +316,7 @@ def delete_assignment(id):
     return redirect("/assignment")
 
 @app.route("/hangout")
+@login_required
 def hangout():
 
     return render_template("hangout.html")
@@ -196,6 +324,7 @@ def hangout():
 
 
 @app.route("/planner",methods=[ "GET","POST"])
+@login_required
 def planner():
     if request.method == "GET":
         return render_template("planner.html")
@@ -255,16 +384,19 @@ def planner():
 
 
 @app.route("/cafes")
+@login_required
 def cafes():
     
     return render_template("cafes.html")
 
 @app.route("/movies")
+@login_required
 def movies():
 
     return render_template("movies.html")
 
 @app.route("/trips")
+@login_required
 def trips_page():
     return render_template("trips.html")
 
